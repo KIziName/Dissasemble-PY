@@ -2,6 +2,8 @@ import sys
 import dis
 import os
 import io
+import tokenize
+import contextlib
 import tkinter as tk
 
 from tkinter import filedialog, messagebox, scrolledtext
@@ -9,11 +11,17 @@ from tkinter import filedialog, messagebox, scrolledtext
 
 def get_bytecode_text(filepath):
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with tokenize.open(filepath) as f:
             source = f.read()
+    except UnicodeDecodeError as e:
+        return False, ("❌ Cannot decode file '{}' using the declared "
+                       "encoding: {}").format(filepath, e)
+    except SyntaxError as e:
+        return False, ("❌ Invalid coding declaration in '{}' "
+                       "(PEP 263): {}").format(filepath, e)
     except FileNotFoundError:
         return False, "❌ File '{}' not found.".format(filepath)
-    except Exception as e:
+    except OSError as e:
         return False, "❌ Read error: {}".format(e)
 
     if not source.strip():
@@ -32,12 +40,8 @@ def get_bytecode_text(filepath):
         filepath, sys.version.split()[0]
     ))
 
-    old_stdout = sys.stdout
-    sys.stdout = buf
-    try:
+    with contextlib.redirect_stdout(buf):
         dis.dis(code_obj)
-    finally:
-        sys.stdout = old_stdout
 
     buf.write("===== End of bytecode =====\n")
     return True, buf.getvalue()
@@ -45,7 +49,6 @@ def get_bytecode_text(filepath):
 
 
 class DisassemblerApp(object):
-    
     def __init__(self, root):
         self.root = root
         root.title("Python Bytecode Disassembler")
@@ -85,9 +88,6 @@ class DisassemblerApp(object):
 
     def set_text(self, s):
         self.text.delete("1.0", tk.END)
-        self.text.insert(tk.END, s)
-
-    def append_text(self, s):
         self.text.insert(tk.END, s)
 
     def clear(self):
@@ -130,12 +130,16 @@ class DisassemblerApp(object):
             self.status.config(text="OK: {}".format(os.path.abspath(filepath)))
         else:
             self.status.config(text="Error.")
-
+            
 
 def show_bytecode_cli(filepath):
     ok, text = get_bytecode_text(filepath)
-    sys.stdout.write(text)
-
+    if ok:
+        sys.stdout.write(text)
+    else:
+        sys.stderr.write(text + "\n")
+        sys.exit(1)
+        
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
