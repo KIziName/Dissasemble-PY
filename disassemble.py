@@ -3,7 +3,6 @@ import dis
 import os
 import io
 import tokenize
-import contextlib
 import tkinter as tk
 
 from tkinter import filedialog, messagebox, scrolledtext
@@ -14,44 +13,41 @@ def get_bytecode_text(filepath):
         with tokenize.open(filepath) as f:
             source = f.read()
     except UnicodeDecodeError as e:
-        return False, ("❌ Cannot decode file '{}' using the declared "
-                       "encoding: {}").format(filepath, e)
+        return False, (f"❌ Cannot decode file '{filepath}' using the "
+                       f"declared encoding: {e}")
     except SyntaxError as e:
-        return False, ("❌ Invalid coding declaration in '{}' "
-                       "(PEP 263): {}").format(filepath, e)
+        return False, (f"❌ Invalid coding declaration in '{filepath}' "
+                       f"(PEP 263): {e}")
     except FileNotFoundError:
-        return False, "❌ File '{}' not found.".format(filepath)
+        return False, f"❌ File '{filepath}' not found."
     except OSError as e:
-        return False, "❌ Read error: {}".format(e)
-
+        return False, f"❌ Read error: {e}"
+        
     if not source.strip():
-        return False, ("⚠️ File '{}' is empty or contains only whitespace. "
-                       "No bytecode.").format(filepath)
+        return False, (f"⚠️ File '{filepath}' is empty or contains only "
+                       f"whitespace. No bytecode.")
 
     try:
         code_obj = compile(source, filepath, 'exec')
     except SyntaxError as e:
-        return False, "❌ Syntax error: {}".format(e)
-    except Exception as e:
-        return False, "❌ Compilation error: {}".format(e)
+        return False, f"❌ Syntax error: {e}"
+    except (ValueError, MemoryError) as e:
+        return False, f"❌ Compilation error: {e}"
 
     buf = io.StringIO()
-    buf.write("\n===== Bytecode for {} (Python {}) =====\n".format(
-        filepath, sys.version.split()[0]
-    ))
+    buf.write(f"\n===== Bytecode for {filepath} "
+              f"(Python {sys.version.split()[0]}) =====\n")
 
-    with contextlib.redirect_stdout(buf):
-        dis.dis(code_obj)
+    dis.dis(code_obj, file=buf)
 
     buf.write("===== End of bytecode =====\n")
     return True, buf.getvalue()
 
 
-
 class DisassemblerApp(object):
     def __init__(self, root):
         self.root = root
-        root.title("Python Bytecode Disassembler")
+        root.title("Bytecode Disassembler")
         root.geometry("820x600")
 
         top = tk.Frame(root)
