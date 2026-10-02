@@ -22,7 +22,7 @@
 3. Готовый байт-код
 
 ## Требования
-- **Python 3.6** и выше
+- ***Python 3.7*** и выше
 
 ## Прммер кода (исходник + байт-код)
 ``` python
@@ -74,7 +74,7 @@ Is a lightweight wrapper around the built-in `dis` module. It helps you:
 
 ## Requirements
 
-- ***Python 3.6*** and above
+- ***Python 3.7*** and above
 
 ## Example code (source + bytecode)
 ``` python
