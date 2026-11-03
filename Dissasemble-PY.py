@@ -24,7 +24,7 @@ def get_bytecode_text(filepath):
                        f"{sys.version_info.minor} "
                        f"(expected {importlib.util.MAGIC_NUMBER.hex()}).\n"
                        f"Run this script with the same Python version that "
-                       f"produced the .pyc (e.g. py -3.13)."
+                       f"produced the .pyc"
                    )
                 f.read(12)                       
                 code_obj = marshal.load(f)
