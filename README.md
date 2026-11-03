@@ -1,4 +1,4 @@
-## 🔍 disassemble-PY
+## 🔍 Disassemble-PY
 
 Простой инструмент для просмотра байт-кода Python.  
 
@@ -49,7 +49,7 @@ print(greet("World"))
              22 RETURN_VALUE
 ```
 
-## 🔍 disassemble-PY
+## 🔍 Disassemble-PY
 
 A simple tool for viewing Python bytecode.
 
