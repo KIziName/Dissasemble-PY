@@ -2,7 +2,7 @@
 
 Простой инструмент для просмотра байт-кода Python.  
 
-Он компилирует указанный `.py`-файл и показывает, во что Python превращает ваш код перед выполнением.
+Он компилирует указанный `.py-.pyc`-файл и показывает, во что Python превращает ваш код перед выполнением.
 
 
 ## 📦 Что это?
@@ -18,7 +18,7 @@
 ## 🚀 Установка
 
 1. Запустите
-2. Напишите названия `.py`
+2. Выберите файл `.py-.pyc` (py или pyc)
 3. Готовый байт-код
 
 ## Требования
@@ -53,7 +53,7 @@ print(greet("World"))
 
 A simple tool for viewing Python bytecode.
 
-It compiles a specified `.py` file and shows what Python turns your code into before execution.
+It compiles a specified `.py-.pyc` file and shows what Python turns your code into before execution.
 
 
 ## 📦 What is it?
@@ -69,7 +69,7 @@ Is a lightweight wrapper around the built-in `dis` module. It helps you:
 ## 🚀 Installation
 
 1. Run it.
-2. Enter the name of the `.py` file.
+2. Select a file `.py-.pyc` (py or pyc)
 3. Get the resulting bytecode.
 
 ## Requirements
