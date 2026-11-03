@@ -18,14 +18,14 @@ def get_bytecode_text(filepath):
             with open(filepath, "rb") as f:
                 magic = f.read(4)
                 if magic != importlib.util.MAGIC_NUMBER:
-                    return False, (
-                        f"❌ magic {magic.hex()} не совпадает с этим "
-                        f"Python ({sys.version_info.major}."
-                        f"{sys.version_info.minor}, magic "
-                        f"{importlib.util.MAGIC_NUMBER.hex()}).\n"
-                        f"Запусти скрипт под той же версией Python, "
-                        f"что собрала .pyc (например, py -3.13)."
-                    )
+                   return False, (
+                       f"❌ Magic mismatch: {magic.hex()} doesn't match "
+                       f"this Python {sys.version_info.major}."
+                       f"{sys.version_info.minor} "
+                       f"(expected {importlib.util.MAGIC_NUMBER.hex()}).\n"
+                       f"Run this script with the same Python version that "
+                       f"produced the .pyc (e.g. py -3.13)."
+                   )
                 f.read(12)                       
                 code_obj = marshal.load(f)
         else:
