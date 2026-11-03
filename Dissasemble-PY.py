@@ -18,7 +18,7 @@ def get_bytecode_text(filepath):
             with open(filepath, "rb") as f:
                 magic = f.read(4)
                 if magic != importlib.util.MAGIC_NUMBER:
-                   return False, (
+                    return False, (
                        f"❌ Magic mismatch: {magic.hex()} doesn't match "
                        f"this Python {sys.version_info.major}."
                        f"{sys.version_info.minor} "
